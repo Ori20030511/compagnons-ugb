@@ -88,20 +88,60 @@
 
             <!-- Suggestions -->
             <div id="suggestions" class="suggestions mt-3">
-                <h6 class="text-muted mb-2">Suggestions :</h6>
-                <div class="d-flex flex-wrap gap-2">
-                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
-                        Comment rédiger un communiqué de presse ?
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
-                        Expliquez les théories de la communication
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
-                        Conseils pour mon stage en agence
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
-                        Métiers de la communication au Sénégal
-                    </button>
+                <h6 class="text-muted mb-2">Suggestions par thème :</h6>
+                <div class="accordion" id="suggestionsAccordion">
+                    <!-- Cours -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#coursCollapse">
+                                Cours et théories
+                            </button>
+                        </h2>
+                        <div id="coursCollapse" class="accordion-collapse collapse" data-bs-parent="#suggestionsAccordion">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-wrap gap-2" id="coursSuggestions"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Méthodologie -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#methodoCollapse">
+                                Méthodologie
+                            </button>
+                        </h2>
+                        <div id="methodoCollapse" class="accordion-collapse collapse" data-bs-parent="#suggestionsAccordion">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-wrap gap-2" id="methodologieSuggestions"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Métiers -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#metiersCollapse">
+                                Métiers et débouchés
+                            </button>
+                        </h2>
+                        <div id="metiersCollapse" class="accordion-collapse collapse" data-bs-parent="#suggestionsAccordion">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-wrap gap-2" id="metiersSuggestions"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pratique -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pratiqueCollapse">
+                                Pratique professionnelle
+                            </button>
+                        </h2>
+                        <div id="pratiqueCollapse" class="accordion-collapse collapse" data-bs-parent="#suggestionsAccordion">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-wrap gap-2" id="pratiqueSuggestions"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
