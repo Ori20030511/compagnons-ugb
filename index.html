@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Com'pagnons - Assistant IA pour étudiants en Communication UGB</title>
+    
+    <meta name="description" content="Assistant IA pour les étudiants en Communication de l'UGB">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="styles.css" rel="stylesheet">
+  <!-- Google AI SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.3/dist/web/index.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3 shadow-sm">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Com'pagnons - UGB</h1>
+                <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                    <i class="fas fa-info-circle"></i> À propos
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Chat Container -->
+        <div class="chat-container bg-light rounded shadow-sm p-3">
+            <!-- Messages Zone -->
+            <div id="messagesContainer" class="messages-zone mb-3">
+                <!-- Les messages seront insérés ici dynamiquement -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typingIndicator" class="typing-indicator d-none">
+                <div class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Input Zone -->
+            <div class="input-zone">
+                <div class="d-flex gap-2">
+                    <textarea id="userInput" class="form-control" rows="3" 
+                        placeholder="Posez votre question ici..."></textarea>
+                    <button id="sendButton" class="btn btn-primary align-self-end">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div id="suggestions" class="suggestions mt-3">
+                <h6 class="text-muted mb-2">Suggestions :</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
+                        Comment rédiger un communiqué de presse ?
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
+                        Expliquez les théories de la communication
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
+                        Conseils pour mon stage en agence
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm suggestion-btn">
+                        Métiers de la communication au Sénégal
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls mt-3 d-flex justify-content-between">
+            <button id="clearButton" class="btn btn-outline-danger">
+                <i class="fas fa-trash"></i> Effacer la conversation
+            </button>
+            <button id="exportButton" class="btn btn-outline-secondary">
+                <i class="fas fa-download"></i> Exporter
+            </button>
+        </div>
+    </main>
+
+    <!-- About Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">À propos de Com'pagnons</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Com'pagnons est votre assistant IA dédié aux étudiants en Communication de l'UGB.</p>
+                    <p>Fonctionnalités :</p>
+                    <ul>
+                        <li>Aide aux cours et concepts</li>
+                        <li>Assistance rédactionnelle</li>
+                        <li>Conseils professionnels</li>
+                        <li>Préparation aux stages</li>
+                        <li>Orientation métiers</li>
+                    </ul>
+                    <p class="mb-0 text-muted">Version 1.0 - Projet étudiant UGB 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- App Scripts - ORDRE IMPORTANT -->
+<script>
+    // Attendons que le SDK soit chargé
+    window.onload = function() {
+        // Chargement des scripts dans l'ordre
+        const scripts = ['config.js', 'app.js'];
+        function loadScript(index) {
+            if (index < scripts.length) {
+                const script = document.createElement('script');
+                script.src = scripts[index];
+                script.onload = () => loadScript(index + 1);
+                document.body.appendChild(script);
+            } else {
+                // Tous les scripts chargés
+                console.log('Scripts loaded');
+            }
+        }
+        // Démarre le chargement en chaîne
+        loadScript(0);
+    };
+</script>
+</body>
+</html>
