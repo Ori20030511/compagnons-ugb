@@ -1,7 +1,8 @@
 // Configuration de Com'pagnons
 const CONFIG = {
-    // Clé API Gemini
-    GEMINI_API_KEY: 'VOTRE_CLE_API_ICI', // Remplacez par votre clé API
+    // URL du serveur proxy
+    API_URL: 'http://localhost:3000/api/chat',
+    PROD_API_URL: 'https://votre-serveur.herokuapp.com/api/chat', // À configurer // Remplacez par votre clé API
 
     // Configuration de génération (utilisée par le SDK Google AI)
     GENERATION_CONFIG: {

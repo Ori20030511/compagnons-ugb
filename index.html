@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Assistant IA pour les étudiants en Communication de l'UGB">
+    <meta name="theme-color" content="#0d6efd">
+    
     <title>Com'pagnons - Assistant IA pour étudiants en Communication UGB</title>
     
-    <meta name="description" content="Assistant IA pour les étudiants en Communication de l'UGB">
+    <!-- Preload des ressources critiques -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
+    <link rel="preload" href="styles.css" as="style">
     
-    <!-- Bootstrap 5 CSS -->
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="styles.css" rel="stylesheet">
-  <!-- Google AI SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.3/dist/web/index.js"></script>
+
+    <!-- Scripts avec attributs defer -->
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.3/dist/web/index.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 <body>
     <!-- Header -->
@@ -30,30 +35,53 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container my-4">
+    <main class="container my-4" role="main">
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-5 d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p class="mt-2">Initialisation de Com'pagnons...</p>
+        </div>
+
         <!-- Chat Container -->
-        <div class="chat-container bg-light rounded shadow-sm p-3">
+        <section class="chat-container bg-light rounded shadow-sm p-3" aria-labelledby="chatTitle">
+            <h1 id="chatTitle" class="visually-hidden">Conversation avec Com'pagnons</h1>
+            
             <!-- Messages Zone -->
-            <div id="messagesContainer" class="messages-zone mb-3">
+            <div id="messagesContainer" class="messages-zone mb-3" role="log" aria-live="polite">
                 <!-- Les messages seront insérés ici dynamiquement -->
             </div>
 
             <!-- Typing Indicator -->
-            <div id="typingIndicator" class="typing-indicator d-none">
-                <div class="dots">
+            <div id="typingIndicator" class="typing-indicator d-none" aria-hidden="true">
+                <div class="dots" role="status">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
+                <span class="visually-hidden">Com'pagnons est en train d'écrire...</span>
             </div>
 
             <!-- Input Zone -->
             <div class="input-zone">
                 <div class="d-flex gap-2">
-                    <textarea id="userInput" class="form-control" rows="3" 
-                        placeholder="Posez votre question ici..."></textarea>
-                    <button id="sendButton" class="btn btn-primary align-self-end">
-                        <i class="fas fa-paper-plane"></i>
+                    <label for="userInput" class="visually-hidden">Votre message</label>
+                    <textarea 
+                        id="userInput" 
+                        class="form-control" 
+                        rows="3"
+                        placeholder="Posez votre question ici..."
+                        aria-label="Votre message"
+                        maxlength="1000"
+                    ></textarea>
+                    <button 
+                        id="sendButton" 
+                        class="btn btn-primary align-self-end"
+                        aria-label="Envoyer le message"
+                        disabled
+                    >
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -116,26 +144,59 @@
    <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- App Scripts - ORDRE IMPORTANT -->
-<script>
-    // Attendons que le SDK soit chargé
-    window.onload = function() {
-        // Chargement des scripts dans l'ordre
-        const scripts = ['config.js', 'app.js'];
-        function loadScript(index) {
-            if (index < scripts.length) {
-                const script = document.createElement('script');
-                script.src = scripts[index];
-                script.onload = () => loadScript(index + 1);
-                document.body.appendChild(script);
-            } else {
-                // Tous les scripts chargés
-                console.log('Scripts loaded');
-            }
+<!-- App Scripts -->
+<script type="module">
+    // Gestion du chargement de l'application
+    const loadingState = document.getElementById('loadingState');
+    const chatContainer = document.querySelector('.chat-container');
+    const sendButton = document.getElementById('sendButton');
+    const userInput = document.getElementById('userInput');
+
+    // Afficher l'état de chargement
+    loadingState.classList.remove('d-none');
+    chatContainer.classList.add('d-none');
+
+    // Activer/désactiver le bouton d'envoi selon le contenu
+    userInput.addEventListener('input', () => {
+        sendButton.disabled = !userInput.value.trim();
+    });
+
+    // Chargement des scripts avec gestion d'erreurs
+    async function loadScripts() {
+        try {
+            const config = await import('./config.js');
+            const app = await import('./app.js');
+            
+            // Scripts chargés avec succès
+            console.log('Application initialisée');
+            loadingState.classList.add('d-none');
+            chatContainer.classList.remove('d-none');
+        } catch (error) {
+            console.error('Erreur de chargement:', error);
+            loadingState.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Erreur de chargement</h4>
+                    <p>Impossible d'initialiser l'application. Veuillez rafraîchir la page.</p>
+                    <hr>
+                    <p class="mb-0">Détail technique : ${error.message}</p>
+                </div>
+            `;
         }
-        // Démarre le chargement en chaîne
-        loadScript(0);
-    };
+    }
+
+    // Démarrer le chargement
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadScripts);
+    } else {
+        loadScripts();
+    }
+
+    // Service Worker pour le mode hors ligne
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('ServiceWorker enregistré'))
+            .catch(error => console.error('Erreur ServiceWorker:', error));
+    }
 </script>
 </body>
 </html>
