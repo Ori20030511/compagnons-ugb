@@ -1,0 +1,34 @@
+# Configuration des fins de ligne
+* text=auto eol=lf
+
+# Fichiers source
+*.js    text
+*.html  text
+*.css   text
+*.md    text
+*.json  text
+
+# Documentation
+*.txt   text
+*.pdf   binary
+
+# Images
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.svg   text
+
+# Fichiers spécifiques au projet
+.env.example    text
+.gitignore      text
+.gitattributes  text
+
+# Forcer les scripts à utiliser LF
+*.sh text eol=lf
+
+# Ignorer les fichiers dans l'export
+.gitattributes  export-ignore
+.gitignore      export-ignore
+README.md       export-ignore
+.env.example    export-ignore

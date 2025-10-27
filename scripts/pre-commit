@@ -1,0 +1,40 @@
+#!/bin/bash
+
+echo "🔍 Vérification de sécurité pre-commit..."
+
+# Vérification des secrets potentiels
+echo "Recherche de secrets..."
+SECRETS_PATTERN="API_KEY\|SECRET\|PASSWORD\|PRIVATE_KEY"
+if git diff --cached --name-only | xargs grep -l "$SECRETS_PATTERN"; then
+    echo "❌ ERREUR : Secrets potentiels détectés dans les fichiers à commiter !"
+    echo "Veuillez vérifier que vous n'exposez pas de clés API ou autres secrets."
+    exit 1
+fi
+
+# Vérification des fichiers de configuration sensibles
+echo "Vérification des fichiers sensibles..."
+SENSITIVE_FILES=".env config.private.js secrets.js api-keys.json"
+for file in $SENSITIVE_FILES; do
+    if git diff --cached --name-only | grep -q "$file"; then
+        echo "❌ ERREUR : Tentative de commit d'un fichier sensible : $file"
+        echo "Ce fichier ne doit pas être commité. Ajoutez-le à .gitignore si nécessaire."
+        exit 1
+    fi
+done
+
+# Vérification des gros fichiers
+echo "Vérification de la taille des fichiers..."
+MAX_SIZE=$((1024 * 1024)) # 1MB
+git diff --cached --name-only | while read file; do
+    if [ -f "$file" ]; then
+        size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+        if [ "$size" -gt $MAX_SIZE ]; then
+            echo "❌ ERREUR : Fichier trop volumineux détecté : $file ($size bytes)"
+            echo "Les fichiers de plus de 1MB ne devraient pas être commités."
+            exit 1
+        fi
+    fi
+done
+
+echo "✅ Vérification de sécurité réussie !"
+exit 0
